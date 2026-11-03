@@ -1,0 +1,11 @@
+# Status monitor bundle layer.
+# Installs the Host plugin row; the same package's ./client export is mounted
+# on that row by the client module system.
+- insert:
+    - id: dsh-status-monitor
+      name: '@local/dsh-status-monitor'
+      config:
+        statusUrl: https://status.deepseek.com/
+        refreshMs: 60000
+        defaultVisible: true
+        defaultCorner: right-bottom
