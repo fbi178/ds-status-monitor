@@ -18,45 +18,60 @@
 
 要求：DeepSeek Harness Desktop `0.2.1-rc.2`（其他 0.2.x 版本未验证，欢迎反馈）。
 
-1. 下载本插件目录（解压 zip）
-2. 复制到 DSH 的 profile 插件目录（**必须是真实目录，不能是快捷方式/链接**）：
+### 方式一：手动安装（推荐，零网络依赖）
+
+1. 打开仓库页 <https://github.com/fbi178/ds-status-monitor> → 绿色 **Code** → **Download ZIP** → 解压
+   （打不开 GitHub 用镜像：<https://ghproxy.net/https://github.com/fbi178/ds-status-monitor/archive/refs/heads/main.zip>）
+2. 复制到 DSH 插件目录（**必须是真实目录，不能是快捷方式/链接**）：
 
    ```powershell
-   # Windows（默认 profile 是 desktop）
-   $target = "$env:USERPROFILE\.dsh\profiles\desktop\node_modules\dsh-status-monitor"
-   New-Item -ItemType Directory -Force -Path (Split-Path $target) | Out-Null
+   $target = "$env:USERPROFILE\.dsh\profiles\desktop
+ode_modules\dsh-status-monitor"
    Copy-Item -Recurse -Force <解压出的目录> $target
    ```
 
-3. 在 profile 的 `package.json` 里把它加进 bundles 列表：
+3. 编辑 `~\.dsh\profiles\desktop\package.json`，加两处：
 
    ```jsonc
-   // ~/.dsh/profiles/desktop/package.json —— 完整示例
    {
-     "name": "dsh-profile-desktop",
-     "private": true,
-     "dependencies": {
-       "dsh-status-monitor": "file:./node_modules/dsh-status-monitor"
-     },
      "dsh": {
        "profile": {
          "bundles": [
-           "@deepseek-ai/dsh-base",        // 官方基础包，必须保留
-           "@deepseek-ai/dsh-web-app",     // 官方基础包，必须保留
-           "dsh-status-monitor"            // ← 加这一行
+           "@deepseek-ai/dsh-base",      // 原有，保留
+           "@deepseek-ai/dsh-web-app",   // 原有，保留
+           "dsh-status-monitor"          // ← 新增
          ]
        }
+     },
+     "dependencies": {
+       "dsh-status-monitor": "file:./node_modules/dsh-status-monitor"  // ← 新增
      }
    }
    ```
 
-   > **三个名字必须一致**：`dependencies` 的键、`bundles` 的条目、插件目录名，都是 `dsh-status-monitor`。不一致时插件会被静默跳过（无悬浮窗、无设置页）。
+   > **三个名字必须完全一致**：目录名、`bundles` 条目、`dependencies` 键，都是 `dsh-status-monitor`。不一致时插件被**静默跳过**（无报错、无悬浮窗）。
 
 4. 重启 DeepSeek Harness。
 
-启动后工作区右上角就会出现悬浮窗；设置页左侧会多出「服务状态」一栏。
+### 方式二：git 拉取（需要 git 在 PATH 且能连 GitHub）
 
-### 多 profile 注意
+```powershell
+git clone https://github.com/fbi178/ds-status-monitor.git "$env:USERPROFILE\.dsh\profiles\desktop
+ode_modules\dsh-status-monitor"
+```
+
+然后同方式一的第 3、4 步。
+
+### 方式三：DSH 插件命令（不推荐，依赖 pnpm + git + GitHub 直连三样齐全）
+
+```powershell
+dsh plugin --profile desktop add https://github.com/fbi178/ds-status-monitor
+```
+
+> **这条报 `[ERR_PNPM_GIT_RESOLVE_FAILED]` / `'git' 不是内部或外部命令`？**
+> 前者是国内连不上 GitHub（换方式一，或给命令行挂代理）；后者是机器没装 git（装 [Git for Windows](https://git-scm.com/download/win) 或直接用方式一）。插件本体不含任何构建步骤，手动复制即可，无需 pnpm。
+
+## 多 profile 注意
 
 `dsh web`（浏览器 3080 端口那套）用的是 **`web` profile**，与桌面端的 `desktop` profile 是**两套独立的插件目录**。要在两端都用，就把第 1–3 步对 `~/.dsh/profiles/web/` 再做一遍。
 
