@@ -23,7 +23,7 @@
 
    ```powershell
    # Windows（默认 profile 是 desktop）
-   $target = "$env:USERPROFILE\.dsh\profiles\desktop\node_modules\@local\dsh-status-monitor"
+   $target = "$env:USERPROFILE\.dsh\profiles\desktop\node_modules\dsh-status-monitor"
    New-Item -ItemType Directory -Force -Path (Split-Path $target) | Out-Null
    Copy-Item -Recurse -Force <解压出的目录> $target
    ```
@@ -31,21 +31,26 @@
 3. 在 profile 的 `package.json` 里把它加进 bundles 列表：
 
    ```jsonc
-   // ~/.dsh/profiles/desktop/package.json
+   // ~/.dsh/profiles/desktop/package.json —— 完整示例
    {
+     "name": "dsh-profile-desktop",
+     "private": true,
+     "dependencies": {
+       "dsh-status-monitor": "file:./node_modules/dsh-status-monitor"
+     },
      "dsh": {
        "profile": {
          "bundles": [
-           "...",
-           "@local/dsh-status-monitor"   // ← 加这一行
+           "@deepseek-ai/dsh-base",        // 官方基础包，必须保留
+           "@deepseek-ai/dsh-web-app",     // 官方基础包，必须保留
+           "dsh-status-monitor"            // ← 加这一行
          ]
        }
-     },
-     "dependencies": {
-       "@local/dsh-status-monitor": "file:./node_modules/@local/dsh-status-monitor"
      }
    }
    ```
+
+   > **三个名字必须一致**：`dependencies` 的键、`bundles` 的条目、插件目录名，都是 `dsh-status-monitor`。不一致时插件会被静默跳过（无悬浮窗、无设置页）。
 
 4. 重启 DeepSeek Harness。
 
@@ -68,8 +73,8 @@
 
 ## 卸载
 
-1. 从 profile `package.json` 的 `bundles` 与 `dependencies` 里删掉 `@local/dsh-status-monitor`
-2. 删除 `~/.dsh/profiles/desktop/node_modules/@local/dsh-status-monitor` 目录
+1. 从 profile `package.json` 的 `bundles` 与 `dependencies` 里删掉 `dsh-status-monitor`
+2. 删除 `~/.dsh/profiles/desktop/node_modules/dsh-status-monitor` 目录
 3. 重启 DSH
 
 ## 工作原理

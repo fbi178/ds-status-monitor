@@ -3,7 +3,7 @@
 # on that row by the client module system.
 - insert:
     - id: dsh-status-monitor
-      name: '@local/dsh-status-monitor'
+      name: 'dsh-status-monitor'
       config:
         statusUrl: https://status.deepseek.com/
         refreshMs: 60000
