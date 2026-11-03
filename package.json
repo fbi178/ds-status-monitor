@@ -1,8 +1,7 @@
 {
-  "name": "dsh-status-monitor",
+  "name": "dsh-api-status-float",
   "version": "0.1.0",
-  "description": "DeepSeek API 服务状态实时悬浮窗：可拖拽，自动刷新，兼容 Web 与桌面端",
-  "private": true,
+  "description": "DeepSeek API 服务状态实时悬浮窗 for DeepSeek Harness：可拖拽、60s 自动刷新、兼容 Web 与桌面端",
   "type": "module",
   "main": "lib/index.js",
   "exports": {
@@ -12,8 +11,10 @@
   },
   "files": [
     "lib",
+    "locale",
     "cordis.patch.yml",
-    "README.md"
+    "README.md",
+    "LICENSE"
   ],
   "dsh": {
     "bundle": {
@@ -26,5 +27,26 @@
       ]
     }
   },
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fbi178/ds-status-monitor.git"
+  },
+  "homepage": "https://github.com/fbi178/ds-status-monitor#readme",
+  "bugs": {
+    "url": "https://github.com/fbi178/ds-status-monitor/issues"
+  },
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek",
+    "deepseek-harness",
+    "api-status",
+    "status-float",
+    "float-window"
+  ],
+  "author": "fbi178",
+  "engines": {
+    "node": ">=18"
+  }
 }

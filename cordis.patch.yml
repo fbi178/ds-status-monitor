@@ -2,8 +2,8 @@
 # Installs the Host plugin row; the same package's ./client export is mounted
 # on that row by the client module system.
 - insert:
-    - id: dsh-status-monitor
-      name: 'dsh-status-monitor'
+    - id: dsh-api-status-float
+      name: 'dsh-api-status-float'
       config:
         statusUrl: https://status.deepseek.com/
         refreshMs: 60000
